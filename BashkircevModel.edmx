@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище HotelDBModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Бронирования">
+          <Key>
+            <PropertyRef Name="id_бронирования" />
+          </Key>
+          <Property Name="id_бронирования" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="дата_заезда" Type="date" Nullable="false" />
+          <Property Name="дата_выезда" Type="date" Nullable="false" />
+          <Property Name="количество_гостей" Type="int" Nullable="false" />
+          <Property Name="статус" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="id_клиента" Type="int" Nullable="false" />
+          <Property Name="id_номера" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Клиенты">
+          <Key>
+            <PropertyRef Name="id_клиента" />
+          </Key>
+          <Property Name="id_клиента" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="фамилия" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="имя" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="отчество" Type="nvarchar" MaxLength="50" />
+          <Property Name="дата_рождения" Type="date" Nullable="false" />
+          <Property Name="телефон" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="паспорт" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Номера">
+          <Key>
+            <PropertyRef Name="id_номера" />
+          </Key>
+          <Property Name="id_номера" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="номер" Type="int" Nullable="false" />
+          <Property Name="тип_номера" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="вместимость" Type="int" Nullable="false" />
+          <Property Name="цена_за_сутки" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="статус" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Оказанные_услуги">
+          <Key>
+            <PropertyRef Name="id_оказанной_услуги" />
+          </Key>
+          <Property Name="id_оказанной_услуги" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="дата_оказания" Type="date" Nullable="false" />
+          <Property Name="количество" Type="int" Nullable="false" />
+          <Property Name="стоимость" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_бронирования" Type="int" Nullable="false" />
+          <Property Name="id_услуги" Type="int" Nullable="false" />
+          <Property Name="id_сотрудника" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Сотрудники">
+          <Key>
+            <PropertyRef Name="id_сотрудника" />
+          </Key>
+          <Property Name="id_сотрудника" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="должность" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="фамилия" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="имя" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="отчество" Type="nvarchar" MaxLength="50" />
+          <Property Name="дата_приема" Type="date" Nullable="false" />
+          <Property Name="телефон" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="зарплата" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="стаж" Type="int" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="Услуги">
+          <Key>
+            <PropertyRef Name="id_услуги" />
+          </Key>
+          <Property Name="id_услуги" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="название_услуги" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="стоимость" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Бронирования_Клиенты">
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="1" />
+          <End Role="Бронирования" Type="Self.Бронирования" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Клиенты">
+              <PropertyRef Name="id_клиента" />
+            </Principal>
+            <Dependent Role="Бронирования">
+              <PropertyRef Name="id_клиента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Бронирования_Номера">
+          <End Role="Номера" Type="Self.Номера" Multiplicity="1" />
+          <End Role="Бронирования" Type="Self.Бронирования" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Номера">
+              <PropertyRef Name="id_номера" />
+            </Principal>
+            <Dependent Role="Бронирования">
+              <PropertyRef Name="id_номера" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ОказанныеУслуги_Бронирования">
+          <End Role="Бронирования" Type="Self.Бронирования" Multiplicity="1" />
+          <End Role="Оказанные_услуги" Type="Self.Оказанные_услуги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Бронирования">
+              <PropertyRef Name="id_бронирования" />
+            </Principal>
+            <Dependent Role="Оказанные_услуги">
+              <PropertyRef Name="id_бронирования" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ОказанныеУслуги_Сотрудники">
+          <End Role="Сотрудники" Type="Self.Сотрудники" Multiplicity="1" />
+          <End Role="Оказанные_услуги" Type="Self.Оказанные_услуги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Сотрудники">
+              <PropertyRef Name="id_сотрудника" />
+            </Principal>
+            <Dependent Role="Оказанные_услуги">
+              <PropertyRef Name="id_сотрудника" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ОказанныеУслуги_Услуги">
+          <End Role="Услуги" Type="Self.Услуги" Multiplicity="1" />
+          <End Role="Оказанные_услуги" Type="Self.Оказанные_услуги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Услуги">
+              <PropertyRef Name="id_услуги" />
+            </Principal>
+            <Dependent Role="Оказанные_услуги">
+              <PropertyRef Name="id_услуги" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище HotelDBModelContainer">
+          <EntitySet Name="Бронирования" EntityType="Self.Бронирования" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Клиенты" EntityType="Self.Клиенты" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Номера" EntityType="Self.Номера" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Оказанные_услуги" EntityType="Self.Оказанные_услуги" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Сотрудники" EntityType="Self.Сотрудники" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Услуги" EntityType="Self.Услуги" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Бронирования_Клиенты" Association="Self.FK_Бронирования_Клиенты">
+            <End Role="Клиенты" EntitySet="Клиенты" />
+            <End Role="Бронирования" EntitySet="Бронирования" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Бронирования_Номера" Association="Self.FK_Бронирования_Номера">
+            <End Role="Номера" EntitySet="Номера" />
+            <End Role="Бронирования" EntitySet="Бронирования" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ОказанныеУслуги_Бронирования" Association="Self.FK_ОказанныеУслуги_Бронирования">
+            <End Role="Бронирования" EntitySet="Бронирования" />
+            <End Role="Оказанные_услуги" EntitySet="Оказанные_услуги" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ОказанныеУслуги_Сотрудники" Association="Self.FK_ОказанныеУслуги_Сотрудники">
+            <End Role="Сотрудники" EntitySet="Сотрудники" />
+            <End Role="Оказанные_услуги" EntitySet="Оказанные_услуги" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ОказанныеУслуги_Услуги" Association="Self.FK_ОказанныеУслуги_Услуги">
+            <End Role="Услуги" EntitySet="Услуги" />
+            <End Role="Оказанные_услуги" EntitySet="Оказанные_услуги" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HotelDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Бронирования">
+          <Key>
+            <PropertyRef Name="id_бронирования" />
+          </Key>
+          <Property Name="id_бронирования" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="дата_заезда" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="дата_выезда" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="количество_гостей" Type="Int32" Nullable="false" />
+          <Property Name="статус" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_клиента" Type="Int32" Nullable="false" />
+          <Property Name="id_номера" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Клиенты" Relationship="Self.FK_Бронирования_Клиенты" FromRole="Бронирования" ToRole="Клиенты" />
+          <NavigationProperty Name="Номера" Relationship="Self.FK_Бронирования_Номера" FromRole="Бронирования" ToRole="Номера" />
+          <NavigationProperty Name="Оказанные_услуги" Relationship="Self.FK_ОказанныеУслуги_Бронирования" FromRole="Бронирования" ToRole="Оказанные_услуги" />
+        </EntityType>
+        <EntityType Name="Клиенты">
+          <Key>
+            <PropertyRef Name="id_клиента" />
+          </Key>
+          <Property Name="id_клиента" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="фамилия" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="имя" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="отчество" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="дата_рождения" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="телефон" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="паспорт" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Бронирования" Relationship="Self.FK_Бронирования_Клиенты" FromRole="Клиенты" ToRole="Бронирования" />
+        </EntityType>
+        <EntityType Name="Номера">
+          <Key>
+            <PropertyRef Name="id_номера" />
+          </Key>
+          <Property Name="id_номера" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="номер" Type="Int32" Nullable="false" />
+          <Property Name="тип_номера" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="вместимость" Type="Int32" Nullable="false" />
+          <Property Name="цена_за_сутки" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="статус" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Бронирования" Relationship="Self.FK_Бронирования_Номера" FromRole="Номера" ToRole="Бронирования" />
+        </EntityType>
+        <EntityType Name="Оказанные_услуги">
+          <Key>
+            <PropertyRef Name="id_оказанной_услуги" />
+          </Key>
+          <Property Name="id_оказанной_услуги" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="дата_оказания" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="количество" Type="Int32" Nullable="false" />
+          <Property Name="стоимость" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_бронирования" Type="Int32" Nullable="false" />
+          <Property Name="id_услуги" Type="Int32" Nullable="false" />
+          <Property Name="id_сотрудника" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Бронирования" Relationship="Self.FK_ОказанныеУслуги_Бронирования" FromRole="Оказанные_услуги" ToRole="Бронирования" />
+          <NavigationProperty Name="Сотрудники" Relationship="Self.FK_ОказанныеУслуги_Сотрудники" FromRole="Оказанные_услуги" ToRole="Сотрудники" />
+          <NavigationProperty Name="Услуги" Relationship="Self.FK_ОказанныеУслуги_Услуги" FromRole="Оказанные_услуги" ToRole="Услуги" />
+        </EntityType>
+        <EntityType Name="Сотрудники">
+          <Key>
+            <PropertyRef Name="id_сотрудника" />
+          </Key>
+          <Property Name="id_сотрудника" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="должность" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="фамилия" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="имя" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="отчество" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="дата_приема" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="телефон" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="зарплата" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="стаж" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Оказанные_услуги" Relationship="Self.FK_ОказанныеУслуги_Сотрудники" FromRole="Сотрудники" ToRole="Оказанные_услуги" />
+        </EntityType>
+        <EntityType Name="Услуги">
+          <Key>
+            <PropertyRef Name="id_услуги" />
+          </Key>
+          <Property Name="id_услуги" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="название_услуги" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="стоимость" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Оказанные_услуги" Relationship="Self.FK_ОказанныеУслуги_Услуги" FromRole="Услуги" ToRole="Оказанные_услуги" />
+        </EntityType>
+        <Association Name="FK_Бронирования_Клиенты">
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="1" />
+          <End Role="Бронирования" Type="Self.Бронирования" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Клиенты">
+              <PropertyRef Name="id_клиента" />
+            </Principal>
+            <Dependent Role="Бронирования">
+              <PropertyRef Name="id_клиента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Бронирования_Номера">
+          <End Role="Номера" Type="Self.Номера" Multiplicity="1" />
+          <End Role="Бронирования" Type="Self.Бронирования" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Номера">
+              <PropertyRef Name="id_номера" />
+            </Principal>
+            <Dependent Role="Бронирования">
+              <PropertyRef Name="id_номера" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ОказанныеУслуги_Бронирования">
+          <End Role="Бронирования" Type="Self.Бронирования" Multiplicity="1" />
+          <End Role="Оказанные_услуги" Type="Self.Оказанные_услуги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Бронирования">
+              <PropertyRef Name="id_бронирования" />
+            </Principal>
+            <Dependent Role="Оказанные_услуги">
+              <PropertyRef Name="id_бронирования" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ОказанныеУслуги_Сотрудники">
+          <End Role="Сотрудники" Type="Self.Сотрудники" Multiplicity="1" />
+          <End Role="Оказанные_услуги" Type="Self.Оказанные_услуги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Сотрудники">
+              <PropertyRef Name="id_сотрудника" />
+            </Principal>
+            <Dependent Role="Оказанные_услуги">
+              <PropertyRef Name="id_сотрудника" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ОказанныеУслуги_Услуги">
+          <End Role="Услуги" Type="Self.Услуги" Multiplicity="1" />
+          <End Role="Оказанные_услуги" Type="Self.Оказанные_услуги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Услуги">
+              <PropertyRef Name="id_услуги" />
+            </Principal>
+            <Dependent Role="Оказанные_услуги">
+              <PropertyRef Name="id_услуги" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HotelDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Бронирования" EntityType="Self.Бронирования" />
+          <EntitySet Name="Клиенты" EntityType="Self.Клиенты" />
+          <EntitySet Name="Номера" EntityType="Self.Номера" />
+          <EntitySet Name="Оказанные_услуги" EntityType="Self.Оказанные_услуги" />
+          <EntitySet Name="Сотрудники" EntityType="Self.Сотрудники" />
+          <EntitySet Name="Услуги" EntityType="Self.Услуги" />
+          <AssociationSet Name="FK_Бронирования_Клиенты" Association="Self.FK_Бронирования_Клиенты">
+            <End Role="Клиенты" EntitySet="Клиенты" />
+            <End Role="Бронирования" EntitySet="Бронирования" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Бронирования_Номера" Association="Self.FK_Бронирования_Номера">
+            <End Role="Номера" EntitySet="Номера" />
+            <End Role="Бронирования" EntitySet="Бронирования" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ОказанныеУслуги_Бронирования" Association="Self.FK_ОказанныеУслуги_Бронирования">
+            <End Role="Бронирования" EntitySet="Бронирования" />
+            <End Role="Оказанные_услуги" EntitySet="Оказанные_услуги" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ОказанныеУслуги_Сотрудники" Association="Self.FK_ОказанныеУслуги_Сотрудники">
+            <End Role="Сотрудники" EntitySet="Сотрудники" />
+            <End Role="Оказанные_услуги" EntitySet="Оказанные_услуги" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ОказанныеУслуги_Услуги" Association="Self.FK_ОказанныеУслуги_Услуги">
+            <End Role="Услуги" EntitySet="Услуги" />
+            <End Role="Оказанные_услуги" EntitySet="Оказанные_услуги" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище HotelDBModelContainer" CdmEntityContainer="HotelDBEntities">
+          <EntitySetMapping Name="Бронирования">
+            <EntityTypeMapping TypeName="HotelDBModel.Бронирования">
+              <MappingFragment StoreEntitySet="Бронирования">
+                <ScalarProperty Name="id_бронирования" ColumnName="id_бронирования" />
+                <ScalarProperty Name="дата_заезда" ColumnName="дата_заезда" />
+                <ScalarProperty Name="дата_выезда" ColumnName="дата_выезда" />
+                <ScalarProperty Name="количество_гостей" ColumnName="количество_гостей" />
+                <ScalarProperty Name="статус" ColumnName="статус" />
+                <ScalarProperty Name="id_клиента" ColumnName="id_клиента" />
+                <ScalarProperty Name="id_номера" ColumnName="id_номера" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Клиенты">
+            <EntityTypeMapping TypeName="HotelDBModel.Клиенты">
+              <MappingFragment StoreEntitySet="Клиенты">
+                <ScalarProperty Name="id_клиента" ColumnName="id_клиента" />
+                <ScalarProperty Name="фамилия" ColumnName="фамилия" />
+                <ScalarProperty Name="имя" ColumnName="имя" />
+                <ScalarProperty Name="отчество" ColumnName="отчество" />
+                <ScalarProperty Name="дата_рождения" ColumnName="дата_рождения" />
+                <ScalarProperty Name="телефон" ColumnName="телефон" />
+                <ScalarProperty Name="паспорт" ColumnName="паспорт" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Номера">
+            <EntityTypeMapping TypeName="HotelDBModel.Номера">
+              <MappingFragment StoreEntitySet="Номера">
+                <ScalarProperty Name="id_номера" ColumnName="id_номера" />
+                <ScalarProperty Name="номер" ColumnName="номер" />
+                <ScalarProperty Name="тип_номера" ColumnName="тип_номера" />
+                <ScalarProperty Name="вместимость" ColumnName="вместимость" />
+                <ScalarProperty Name="цена_за_сутки" ColumnName="цена_за_сутки" />
+                <ScalarProperty Name="статус" ColumnName="статус" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Оказанные_услуги">
+            <EntityTypeMapping TypeName="HotelDBModel.Оказанные_услуги">
+              <MappingFragment StoreEntitySet="Оказанные_услуги">
+                <ScalarProperty Name="id_оказанной_услуги" ColumnName="id_оказанной_услуги" />
+                <ScalarProperty Name="дата_оказания" ColumnName="дата_оказания" />
+                <ScalarProperty Name="количество" ColumnName="количество" />
+                <ScalarProperty Name="стоимость" ColumnName="стоимость" />
+                <ScalarProperty Name="id_бронирования" ColumnName="id_бронирования" />
+                <ScalarProperty Name="id_услуги" ColumnName="id_услуги" />
+                <ScalarProperty Name="id_сотрудника" ColumnName="id_сотрудника" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Сотрудники">
+            <EntityTypeMapping TypeName="HotelDBModel.Сотрудники">
+              <MappingFragment StoreEntitySet="Сотрудники">
+                <ScalarProperty Name="id_сотрудника" ColumnName="id_сотрудника" />
+                <ScalarProperty Name="должность" ColumnName="должность" />
+                <ScalarProperty Name="фамилия" ColumnName="фамилия" />
+                <ScalarProperty Name="имя" ColumnName="имя" />
+                <ScalarProperty Name="отчество" ColumnName="отчество" />
+                <ScalarProperty Name="дата_приема" ColumnName="дата_приема" />
+                <ScalarProperty Name="телефон" ColumnName="телефон" />
+                <ScalarProperty Name="зарплата" ColumnName="зарплата" />
+                <ScalarProperty Name="стаж" ColumnName="стаж" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Услуги">
+            <EntityTypeMapping TypeName="HotelDBModel.Услуги">
+              <MappingFragment StoreEntitySet="Услуги">
+                <ScalarProperty Name="id_услуги" ColumnName="id_услуги" />
+                <ScalarProperty Name="название_услуги" ColumnName="название_услуги" />
+                <ScalarProperty Name="стоимость" ColumnName="стоимость" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

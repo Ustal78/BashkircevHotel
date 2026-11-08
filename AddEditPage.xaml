@@ -1,0 +1,46 @@
+﻿<Page x:Class="Hotel.AddEditPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Добавление и редактирование номера">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30" Width="350"
+                    HorizontalAlignment="Center">
+
+            <TextBlock Name="TitleText"
+                       Text="Добавление номера"
+                       FontSize="24"
+                       Margin="0,0,0,20"/>
+
+            <TextBlock Text="Номер комнаты:"/>
+            <TextBox Name="NumberBox" Height="30" Margin="0,5,0,10"/>
+
+            <TextBlock Text="Тип номера:"/>
+            <ComboBox Name="TypeBox" Height="30" Margin="0,5,0,10">
+                <ComboBoxItem Content="Эконом"/>
+                <ComboBoxItem Content="Стандарт"/>
+                <ComboBoxItem Content="Комфорт"/>
+                <ComboBoxItem Content="Люкс"/>
+            </ComboBox>
+
+            <TextBlock Text="Вместимость:"/>
+            <TextBox Name="CapacityBox" Height="30" Margin="0,5,0,10"/>
+
+            <TextBlock Text="Цена за сутки:"/>
+            <TextBox Name="PriceBox" Height="30" Margin="0,5,0,10"/>
+
+            <TextBlock Text="Статус:"/>
+            <ComboBox Name="StatusBox" Height="30" Margin="0,5,0,20">
+                <ComboBoxItem Content="Свободен"/>
+                <ComboBoxItem Content="Занят"/>
+                <ComboBoxItem Content="Забронирован"/>
+                <ComboBoxItem Content="На уборке"/>
+            </ComboBox>
+
+            <Button Content="Сохранить"
+                    Height="35"
+                    Click="SaveButton_Click"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>
